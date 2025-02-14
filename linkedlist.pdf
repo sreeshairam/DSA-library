@@ -1,0 +1,99 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.prev = None  # For doubly linked list
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def append(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        temp = self.head
+        while temp.next:
+            temp = temp.next
+        temp.next = new_node
+
+    def prepend(self, data):
+        new_node = Node(data)
+        new_node.next = self.head
+        self.head = new_node
+
+    def insert(self, index, data):
+        new_node = Node(data)
+        if index == 0:
+            self.prepend(data)
+            return
+        temp = self.head
+        for _ in range(index - 1):
+            if temp is None:
+                return
+            temp = temp.next
+        if temp is None:
+            return
+        new_node.next = temp.next
+        temp.next = new_node
+
+    def delete(self, value):
+        temp = self.head
+        if temp and temp.data == value:
+            self.head = temp.next
+            temp = None
+            return
+        prev = None
+        while temp and temp.data != value:
+            prev = temp
+            temp = temp.next
+        if temp is None:
+            return
+        prev.next = temp.next
+        temp = None
+
+    def search(self, value):
+        temp = self.head
+        position = 0
+        while temp:
+            print(f"Checking node with value {temp.data}")  # Debug print
+            if temp.data == value:
+                return position
+            temp = temp.next
+            position += 1
+        return -1
+
+    def reverse(self):
+        prev = None
+        current = self.head
+        while current:
+            next_node = current.next
+            current.next = prev
+            prev = current
+            current = next_node
+        self.head = prev
+
+    def to_doubly(self):
+        temp = self.head
+        while temp and temp.next:
+            temp.next.prev = temp
+            temp = temp.next
+
+    def to_circular(self):
+        if not self.head:
+            return
+        temp = self.head
+        while temp.next:
+            temp = temp.next
+        temp.next = self.head
+
+    def display(self):
+        temp = self.head
+        while temp:
+            print(temp.data, end=" -> ")
+            temp = temp.next
+        print("None")
+
+
+
